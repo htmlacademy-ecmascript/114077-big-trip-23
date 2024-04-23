@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Иван Загайнов](https://up.htmlacademy.ru/ecmascript/23/user/114077).
-* Наставник: `Неизвестно`.
+* Наставник: [Arthur Litovko](https://htmlacademy.ru/profile/id6927).
 
 ---
 
