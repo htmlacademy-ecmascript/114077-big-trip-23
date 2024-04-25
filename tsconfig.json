@@ -7,8 +7,9 @@
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "module": "ES2022",
     "moduleResolution": "node",
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "outDir": "./build/",
+    "baseUrl": "./src",
     "paths": {
       "@presenter/*": ["./src/presenter/*"],
       "@view": ["./src/view"],
