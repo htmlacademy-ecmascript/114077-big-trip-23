@@ -1,5 +1,6 @@
 import { dirname, resolve } from 'path';
 import CopyPlugin from 'copy-webpack-plugin';
+import HtmlPlugin from 'html-webpack-plugin';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -13,6 +14,24 @@ export default {
     clean: true,
   },
   devtool: 'source-map',
+  plugins: [
+    new HtmlPlugin({
+      template: 'public/index.html',
+    }),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: 'public',
+          globOptions: {
+            ignore: ['**/index.html'],
+          },
+        },
+      ],
+    }),
+  ],
+  resolve: {
+    extensions: ['.ts', '.js'],
+  },
   module: {
     rules: [
       {
@@ -25,18 +44,15 @@ export default {
           },
         },
       },
-    ]
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        use: 'ts-loader',
+      },
+    ],
   },
-  plugins: [
-    new CopyPlugin({
-      patterns: [
-        {
-          from: 'public',
-          globOptions: {
-            ignore: ['**/index.html'],
-          },
-        },
-      ],
-    }),
-  ],
 };
