@@ -1,21 +1,14 @@
-import { type TemplateElement } from './view/abstract-element';
+import { AbstractElement } from "./view/abstract-element";
 
-enum RenderPosition {
-  BEFOREBEGIN = 'beforebegin',
-  AFTERBEGIN = 'afterbegin',
-  BEFOREEND = 'beforeend',
-  AFTEREND = 'afterend',
-}
-
-function createElement(template: string): Element {
-  const newElement: HTMLDivElement = document.createElement('div');
+function createElement<E extends Element = HTMLDivElement>(template: string): E {
+  const newElement : HTMLDivElement = document.createElement('div');
   newElement.innerHTML = template;
 
-  return newElement.firstElementChild as Element;
+  return <E>newElement.firstElementChild;
 }
 
-function render(component: TemplateElement, container: Element, place: RenderPosition = RenderPosition.BEFOREEND) {
+function render(component: Pick<AbstractElement, 'element'>, container: HTMLElement, place: InsertPosition = 'beforeend') {
   container.insertAdjacentElement(place, component.element);
 }
 
-export { RenderPosition, createElement, render };
+export { createElement, render };

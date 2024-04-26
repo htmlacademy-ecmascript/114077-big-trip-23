@@ -1,5 +1,5 @@
 import { render } from '../render';
-import { type TemplateElement } from '../view/abstract-element';
+import { AbstractElement } from '../view/abstract-element';
 
 import ListView from '../view/list-view';
 import ListItemView from '../view/list-item-view';
@@ -10,14 +10,14 @@ import AddNewPointView from '../view/add-new-point-view';
 
 export default class ListPresenter {
   mainContainer;
-  taskListElement = new ListView();
+  taskListElement: ListView = new ListView();
 
   constructor({ mainContainer }) {
     this.mainContainer = mainContainer;
   }
 
-  _renderListItem(element: TemplateElement) {
-    const listItem = new ListItemView();
+  #renderListItem(element: Pick<AbstractElement, 'element'>) {
+    const listItem: ListItemView = new ListItemView();
 
     render(listItem, this.taskListElement.element);
     render(element, listItem.element);
@@ -26,13 +26,13 @@ export default class ListPresenter {
   init() {
     render(this.taskListElement, this.mainContainer);
 
-    this._renderListItem(new AddNewPointView());
+    this.#renderListItem(new AddNewPointView());
     this.renderWaypointList(3);
   }
 
   renderWaypointList(count: number): void {
     for (let i = 0; i < count; i++) {
-      this._renderListItem(new WayPointView());
+      this.#renderListItem(new WayPointView());
     }
   }
 }

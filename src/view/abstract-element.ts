@@ -1,25 +1,16 @@
 import { createElement } from '../render';
 
-export interface TemplateElement {
-  template: string;
-  element: Element;
-  removeElement: () => void;
-}
-
-export abstract class AbstractElement {
-  _element: Element | null = null;
+export abstract class AbstractElement<E extends Element = HTMLDivElement> {
+  #element: E | null = null;
 
   abstract get template(): string;
 
-  get element(): Element {
-    if (!this._element) {
-      this._element = createElement(this.template);
-    }
-
-    return this._element;
+  get element(): E {
+    this.#element ??= createElement<E>(this.template);
+    return this.#element;
   }
 
   removeElement(): void {
-    this._element = null;
+    this.#element = null;
   }
 }

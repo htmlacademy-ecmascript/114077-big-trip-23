@@ -1,4 +1,4 @@
-import { AbstractElement, TemplateElement } from './abstract-element';
+import { AbstractElement } from './abstract-element';
 
 const createTemplate = (): string => `
   <form class="trip-filters" action="#" method="get">
@@ -26,7 +26,7 @@ const createTemplate = (): string => `
   </form>
 `;
 
-export default class ListFilter extends AbstractElement implements TemplateElement {
+export default class ListFilter extends AbstractElement {
   get template(): string {
     return createTemplate();
   }

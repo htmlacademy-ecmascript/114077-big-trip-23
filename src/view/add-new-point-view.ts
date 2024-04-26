@@ -1,4 +1,4 @@
-import { AbstractElement, type TemplateElement } from './abstract-element';
+import { AbstractElement } from './abstract-element';
 
 const createTemplate = () => `
   <form class="event event--edit" action="#" method="post">
@@ -163,7 +163,7 @@ const createTemplate = () => `
   </form>
 `;
 
-export default class AddNewPointView extends AbstractElement implements TemplateElement {
+export default class AddNewPointView extends AbstractElement {
   get template(): string {
     return createTemplate();
   }

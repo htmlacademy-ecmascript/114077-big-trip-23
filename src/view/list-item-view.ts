@@ -1,8 +1,8 @@
-import { AbstractElement, type TemplateElement } from './abstract-element';
+import { AbstractElement } from './abstract-element';
 
 const createTemplate = (): string => '<li class="trip-events__item"></li>';
 
-export default class ListItemView extends AbstractElement implements TemplateElement {
+export default class ListItemView extends AbstractElement {
   get template(): string {
     return createTemplate();
   }
