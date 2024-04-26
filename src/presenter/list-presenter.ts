@@ -6,7 +6,6 @@ import ListItemView from '../view/list-item-view';
 
 import WayPointView from '../view/way-point-view';
 import AddNewPointView from '../view/add-new-point-view';
-// import EditPointView from '../view/edit-point-view';
 
 export default class ListPresenter {
   mainContainer;
@@ -16,7 +15,7 @@ export default class ListPresenter {
     this.mainContainer = mainContainer;
   }
 
-  #renderListItem(element: Pick<AbstractElement, 'element'>) {
+  #renderListItem(element: AbstractElement<Element>) {
     const listItem: ListItemView = new ListItemView();
 
     render(listItem, this.taskListElement.element);

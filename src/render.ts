@@ -1,4 +1,4 @@
-import { AbstractElement } from './view/abstract-element';
+import type { AbstractElement } from './view/abstract-element';
 
 function createElement<E extends Element = HTMLDivElement>(template: string): E {
   const newElement: HTMLDivElement = document.createElement('div');
@@ -7,7 +7,8 @@ function createElement<E extends Element = HTMLDivElement>(template: string): E 
   return <E>newElement.firstElementChild;
 }
 
-function render(component: Pick<AbstractElement, 'element'>, container: HTMLElement, place: InsertPosition = 'beforeend') {
+type MinimalAbstract = Pick<AbstractElement<Element>, 'element'>;
+function render(component: MinimalAbstract, container: HTMLElement, place: InsertPosition = 'beforeend') {
   container.insertAdjacentElement(place, component.element);
 }
 

@@ -29,7 +29,7 @@ const createTemplate = () => `
   </form>
 `;
 
-export default class ListSortView extends AbstractElement {
+export default class ListSortView extends AbstractElement<HTMLFormElement> {
   get template(): string {
     return createTemplate();
   }

@@ -26,7 +26,7 @@ const createTemplate = (): string => `
   </form>
 `;
 
-export default class ListFilter extends AbstractElement {
+export default class ListFilter extends AbstractElement<HTMLFormElement> {
   get template(): string {
     return createTemplate();
   }

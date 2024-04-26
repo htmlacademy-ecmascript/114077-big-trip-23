@@ -156,7 +156,7 @@ const createTemplate = () => `
   </form>
 `;
 
-export default class EditPointView extends AbstractElement {
+export default class EditPointView extends AbstractElement<HTMLFormElement> {
   get template(): string {
     return createTemplate();
   }
