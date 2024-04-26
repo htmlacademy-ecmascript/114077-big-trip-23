@@ -1,7 +1,7 @@
-import { AbstractElement } from "./view/abstract-element";
+import { AbstractElement } from './view/abstract-element';
 
 function createElement<E extends Element = HTMLDivElement>(template: string): E {
-  const newElement : HTMLDivElement = document.createElement('div');
+  const newElement: HTMLDivElement = document.createElement('div');
   newElement.innerHTML = template;
 
   return <E>newElement.firstElementChild;
