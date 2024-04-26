@@ -4,12 +4,11 @@ import ListSortView from './view/list-sort-view';
 
 import ListPresenter from './presenter/list-presenter';
 
-const siteHeaderElement = document.querySelector('header.page-header')! as Element;
-const siteMainElement = document.querySelector('main.page-main')! as Element;
+const siteHeaderElement = <HTMLElement>document.querySelector('header.page-header');
+const siteMainElement = <HTMLElement>document.querySelector('main.page-main');
 
-const filterContainer = siteHeaderElement.querySelector('.trip-controls__filters')! as Element;
-
-const tripEventsContainer = siteMainElement.querySelector('.trip-events')! as Element;
+const filterContainer = <HTMLElement>siteHeaderElement.querySelector('.trip-controls__filters');
+const tripEventsContainer = <HTMLElement>siteMainElement.querySelector('.trip-events');
 
 render(new ListFilter(), filterContainer);
 render(new ListSortView(), tripEventsContainer);
