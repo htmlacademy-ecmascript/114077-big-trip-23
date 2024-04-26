@@ -1,13 +1,13 @@
 import { dirname, resolve } from 'path';
 import CopyPlugin from 'copy-webpack-plugin';
 import HtmlPlugin from 'html-webpack-plugin';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, URL } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export default {
-  entry: './src/main.js',
+  entry: './src/main.ts',
   output: {
     filename: 'bundle.[contenthash].js',
     path: resolve(__dirname, 'build'),
