@@ -1,4 +1,4 @@
-import { AbstractElement } from './abstract-element';
+import { AbstractView } from './abstract-view';
 
 const createTemplate = (): string => `
   <div class="event">
@@ -38,7 +38,7 @@ const createTemplate = (): string => `
   </div>
 `;
 
-export default class WayPointView extends AbstractElement {
+export default class WayPointView extends AbstractView {
   get template(): string {
     return createTemplate();
   }

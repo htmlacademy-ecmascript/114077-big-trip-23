@@ -1,4 +1,4 @@
-import { AbstractElement } from './abstract-element';
+import { AbstractView } from './abstract-view';
 
 const createTemplate = (): string => `
   <form class="trip-filters" action="#" method="get">
@@ -26,7 +26,7 @@ const createTemplate = (): string => `
   </form>
 `;
 
-export default class ListFilter extends AbstractElement<HTMLFormElement> {
+export default class ListFilter extends AbstractView<HTMLFormElement> {
   get template(): string {
     return createTemplate();
   }

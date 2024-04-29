@@ -1,5 +1,5 @@
 import { render } from '../render';
-import { AbstractElement } from '../view/abstract-element';
+import { AbstractView } from '../view/abstract-view';
 
 import ListView from '../view/list-view';
 import ListItemView from '../view/list-item-view';
@@ -15,7 +15,7 @@ export default class ListPresenter {
     this.mainContainer = mainContainer;
   }
 
-  #renderListItem(element: AbstractElement<Element>) {
+  #renderListItem(element: AbstractView<Element>) {
     const listItem: ListItemView = new ListItemView();
 
     render(listItem, this.taskListElement.element);

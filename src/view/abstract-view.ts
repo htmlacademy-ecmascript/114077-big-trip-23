@@ -1,6 +1,6 @@
 import { createElement } from '../render';
 
-export abstract class AbstractElement<E extends Element = HTMLDivElement> {
+export abstract class AbstractView<E extends Element = HTMLDivElement> {
   #element: E | null = null;
 
   abstract get template(): string;
