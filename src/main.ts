@@ -2,6 +2,8 @@ import { render } from './render';
 import ListFilter from './view/list-filter-view';
 import ListSortView from './view/list-sort-view';
 
+import { mockDestinations } from './mocks/destination';
+
 import ListPresenter from './presenter/list-presenter';
 
 const siteHeaderElement = <HTMLElement>document.querySelector('header.page-header');
