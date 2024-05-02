@@ -36,6 +36,12 @@ const createEventType = (offer: InnerOffer, wayPointOffers: WayPoint['offers']) 
   </div>
 `;
 
+const prepareOffers = (offers, wayPoint: WayPoint) =>
+  offers
+    .find((offer) => offer.type === wayPoint.type)
+    ?.offers.map((offer) => createEventType(offer, wayPoint.offers))
+    .join('');
+
 const createDestinationOption = (destination: Destination) => `<option value="${destination.name}"></option>`;
 
 const createDestinationPicture = (picture: AppPicture) => `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`;
@@ -95,10 +101,7 @@ const createTemplate = ({ wayPoint, destination, destinations, offers }: EditPoi
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
         <div class="event__available-offers">
-          ${offers
-            .find((offer) => offer.type === wayPoint.type)
-            ?.offers.map((offer) => createEventType(offer, wayPoint.offers))
-            .join('')}
+          ${prepareOffers(offers, wayPoint)}
         </div>
       </section>
 
