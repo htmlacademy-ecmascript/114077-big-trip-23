@@ -163,7 +163,7 @@ const createTemplate = () => `
   </form>
 `;
 
-export default class AddNewPointView extends AbstractView<HTMLFormElement> {
+export default class AddPointView extends AbstractView<HTMLFormElement> {
   get template(): string {
     return createTemplate();
   }

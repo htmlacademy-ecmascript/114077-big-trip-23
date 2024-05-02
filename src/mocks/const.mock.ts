@@ -1,4 +1,4 @@
-const MESSAGES = [
+const DESCRIPTIONS = [
   'Bustling city streets with towering skyscrapers',
   'Peaceful countryside with rolling hills and farmland',
   'Tropical beaches with clear blue water and swaying palm trees',
@@ -36,4 +36,4 @@ const OFFERS = [
   'Relax in a local park or garden',
 ];
 
-export { MESSAGES, MOCK_CITIES, OFFERS };
+export { DESCRIPTIONS, MOCK_CITIES, OFFERS };

@@ -1,6 +1,6 @@
 import Randomizer from '../utils/randomizer';
 import { POINTS_TYPES } from '../const';
-import { OFFERS } from './const';
+import { OFFERS } from './const.mock';
 import type { InnerOffer, Offer } from '../types/offer';
 
 const RANDOM_PRICE_FROM = 10;
