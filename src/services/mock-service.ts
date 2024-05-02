@@ -10,12 +10,11 @@ import type { Destination } from '../types/destination';
 import { mockDestinations } from '../mocks/destination';
 import { mockOffers } from '../mocks/offer';
 
-const WAY_POINT_COUNT = 3;
+const WAY_POINT_COUNT = 10;
 
 export default class MockService {
   readonly #destinations : Destination[] = mockDestinations();
   readonly #offers : Offer[] = mockOffers();
-
   readonly #wayPoints : WayPoint[] = [];
 
   constructor() {

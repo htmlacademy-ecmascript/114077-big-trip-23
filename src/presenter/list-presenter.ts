@@ -26,7 +26,7 @@ export default class ListPresenter {
     this.#offersModel = models.offersModel;
 
     this.renderWaypointList();
-    this.#wayPoints[0].switchToEdit();
+    this.#wayPoints[2].switchToEdit();
   }
 
   private renderWaypointList(): void {
