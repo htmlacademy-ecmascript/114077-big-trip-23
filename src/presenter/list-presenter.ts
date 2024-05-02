@@ -7,7 +7,7 @@ import type { WayPoint } from '../types/way-point';
 import type { WayPointsModel, DestinationsModel, OffersModel } from '../model';
 
 export default class ListPresenter {
-  #container : HTMLElement;
+  #container: HTMLElement;
   #listElement: ListView = new ListView();
 
   #wayPoints;
@@ -30,13 +30,16 @@ export default class ListPresenter {
   }
 
   private renderWaypointList(): void {
-    const wayPoints : WayPoint[] = this.#wayPointsModel.wayPoints;
+    const wayPoints: WayPoint[] = this.#wayPointsModel.wayPoints;
 
-    this.#wayPoints = wayPoints.map((wayPoint) => new WayPointPresenter({
-      container: this.#listElement.element,
-      wayPoint,
-      ...this.#models
-    }));
+    this.#wayPoints = wayPoints.map(
+      (wayPoint) =>
+        new WayPointPresenter({
+          container: this.#listElement.element,
+          wayPoint,
+          ...this.#models,
+        }),
+    );
 
     render(this.#listElement, this.#container);
   }

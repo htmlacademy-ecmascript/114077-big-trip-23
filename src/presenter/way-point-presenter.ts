@@ -25,9 +25,9 @@ export default class WayPointPresenter {
 
   #container: HTMLElement | null = null;
   #item = new ListItemView();
-  #content : WayPointView | AddPointView | EditPointView | null = null;
+  #content: WayPointView | AddPointView | EditPointView | null = null;
 
-  constructor({ container, wayPoint, ...models } : WayPointPresenterProps) {
+  constructor({ container, wayPoint, ...models }: WayPointPresenterProps) {
     this.#container = container;
     this.#wayPoint = wayPoint;
 

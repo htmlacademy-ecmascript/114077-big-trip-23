@@ -2,7 +2,7 @@ import MockService from '../services/mock-service';
 import type { Destination } from '../types/destination';
 
 export default class DestinationsModel {
-  readonly #service : MockService | null = null;
+  readonly #service: MockService | null = null;
   readonly #destinations: Destination[] = [];
 
   constructor(service: MockService) {

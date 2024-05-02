@@ -1,7 +1,7 @@
 import { createElement } from '../render';
 
 export abstract class AbstractView<E extends Element = HTMLDivElement> {
-  #element : E | null = null;
+  #element: E | null = null;
   #props;
 
   constructor(props = {}) {
@@ -10,7 +10,7 @@ export abstract class AbstractView<E extends Element = HTMLDivElement> {
 
   abstract get template(): string;
 
-  get element() : E {
+  get element(): E {
     this.#element ??= createElement<E>(this.template);
     return this.#element;
   }

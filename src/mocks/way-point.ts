@@ -10,10 +10,7 @@ const getRandomHour = () => Randomizer.getInteger(0, 23);
 const getRandomMinute = () => Randomizer.getInteger(0, 59);
 
 const getDates = (): { dateTo: WayPoint['dateTo']; dateFrom: WayPoint['dateFrom'] } => {
-  const dateFrom = appDay()
-    .subtract(getRandomDay(), 'day')
-    .subtract(getRandomHour(), 'hour')
-    .subtract(getRandomMinute(), 'minute');
+  const dateFrom = appDay().subtract(getRandomDay(), 'day').subtract(getRandomHour(), 'hour').subtract(getRandomMinute(), 'minute');
 
   const dateTo = dateFrom.add(getRandomDay(), 'day').add(getRandomHour(), 'hour').add(getRandomMinute(), 'minute');
 

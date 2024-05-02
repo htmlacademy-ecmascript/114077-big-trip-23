@@ -2,7 +2,7 @@ import MockService from '../services/mock-service';
 import type { Offer } from '../types/offer';
 
 export default class OffersModel {
-  readonly #service : MockService | null = null;
+  readonly #service: MockService | null = null;
   readonly #offers: Offer[] = [];
 
   constructor(service: MockService) {
@@ -15,6 +15,6 @@ export default class OffersModel {
   }
 
   getByType(type: Offer['type']) {
-    return this.#offers.find((offer : Offer) => offer.type === type);
+    return this.#offers.find((offer: Offer) => offer.type === type);
   }
 }

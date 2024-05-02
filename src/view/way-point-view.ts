@@ -5,10 +5,10 @@ import type { Destination } from '../types/destination';
 import type { InnerOffer, Offer } from '../types/offer';
 
 type WayPointProps = {
-  wayPoint: WayPoint,
-  destination: Destination,
-  offer: Offer,
-}
+  wayPoint: WayPoint;
+  destination: Destination;
+  offer: Offer;
+};
 
 const createOffers = (offer: InnerOffer) => `
   <li class="event__offer">
@@ -18,9 +18,9 @@ const createOffers = (offer: InnerOffer) => `
   </li>
 `;
 
-const createTemplate = ({ wayPoint, destination, offer } : WayPointProps): string => `
+const createTemplate = ({ wayPoint, destination, offer }: WayPointProps): string => `
   <div class="event">
-    <time class="event__date" datetime="2019-03-18">${ wayPoint.dateFrom.format('MMM DD') }</time>
+    <time class="event__date" datetime="2019-03-18">${wayPoint.dateFrom.format('MMM DD')}</time>
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/${wayPoint.type}.png" alt="Event type icon">
     </div>
@@ -34,11 +34,11 @@ const createTemplate = ({ wayPoint, destination, offer } : WayPointProps): strin
       <p class="event__duration">${dayjs.duration(wayPoint.dateTo.diff(wayPoint.dateFrom)).asMinutes()}M</p>
     </div>
     <p class="event__price">
-      &euro;&nbsp;<span class="event__price-value">${offer.offers.reduce((a, b) => a + b.price, 0) }</span>
+      &euro;&nbsp;<span class="event__price-value">${offer.offers.reduce((a, b) => a + b.price, 0)}</span>
     </p>
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
-      ${ offer.offers.map(createOffers).join('') }
+      ${offer.offers.map(createOffers).join('')}
     </ul>
     <button class="event__favorite-btn ${wayPoint.isFavorite ? 'event__favorite-btn--active' : ''}" type="button">
       <span class="visually-hidden">Add to favorite</span>
