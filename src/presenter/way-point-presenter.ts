@@ -55,8 +55,14 @@ export default class WayPointPresenter {
     oldContent.element.remove();
     oldContent.removeElement();
 
-    this.#content = new EditPointView();
+    const wayPoint = this.#wayPoint!;
+    const destination = this.#destinationsModel!.getById(wayPoint.destination);
+    const offer = this.#offersModel!.getByType(wayPoint.type);
 
+    const destinations = this.#destinationsModel!.destinations;
+    const offers = this.#offersModel!.offers;
+
+    this.#content = new EditPointView({ wayPoint, destination, destinations, offers });
     render(this.#content, this.#item.element);
   }
 }

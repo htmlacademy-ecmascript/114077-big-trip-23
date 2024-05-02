@@ -23,8 +23,8 @@ export default class MockService {
 
   #generateWayPoint() {
     const { id: destinationID } = Randomizer.getElement(this.destinations);
-    const offerIDs = Randomizer.getElement(this.offers).offers.map(({ id } : InnerOffer) => id);
     const type = Randomizer.getElement(POINTS_TYPES);
+    const offerIDs = this.offers.find((offer) => offer.type === type)!.offers.map(({ id } : InnerOffer) => id);
 
     return mockWayPoint({
       destination: destinationID,

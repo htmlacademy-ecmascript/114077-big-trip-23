@@ -4,7 +4,7 @@ import type { WayPoint } from '../types/way-point';
 import type { Destination } from '../types/destination';
 import type { InnerOffer, Offer } from '../types/offer';
 
-export type WayPointProps = {
+type WayPointProps = {
   wayPoint: WayPoint,
   destination: Destination,
   offer: Offer,

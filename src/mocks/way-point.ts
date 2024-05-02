@@ -26,7 +26,7 @@ const mockWayPoint = (props: Pick<WayPoint, 'destination' | 'offers' | 'type'>):
   ...getDates(),
   destination: props.destination,
   isFavorite: Randomizer.boolean,
-  offers: props.offers,
+  offers: props.offers.slice(0, Randomizer.getInteger(1, props.offers.length)),
   type: props.type,
 });
 

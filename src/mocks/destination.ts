@@ -17,7 +17,7 @@ const mockDestination = (city: string): Destination => ({
   id: crypto.randomUUID(),
   description: mockDescription(),
   name: city,
-  picture: Array.from({ length: Randomizer.getInteger(RANDOM_FROM, RANDOM_TO) }, () => mockPicture(city)),
+  pictures: Array.from({ length: Randomizer.getInteger(RANDOM_FROM, RANDOM_TO) }, () => mockPicture(city)),
 });
 
 const mockDestinations = (): Destination[] => MOCK_CITIES.map(mockDestination);

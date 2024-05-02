@@ -7,7 +7,7 @@ interface Destination {
   id: string;
   description: string;
   name: string;
-  picture: AppPicture[];
+  pictures: AppPicture[];
 }
 
 export type { Destination, AppPicture };
