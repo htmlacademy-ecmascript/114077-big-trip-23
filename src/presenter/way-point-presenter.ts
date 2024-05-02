@@ -57,8 +57,6 @@ export default class WayPointPresenter {
 
     const wayPoint = this.#wayPoint!;
     const destination = this.#destinationsModel!.getById(wayPoint.destination);
-    const offer = this.#offersModel!.getByType(wayPoint.type);
-
     const destinations = this.#destinationsModel!.destinations;
     const offers = this.#offersModel!.offers;
 
