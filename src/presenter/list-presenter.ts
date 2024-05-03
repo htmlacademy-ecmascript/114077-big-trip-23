@@ -1,37 +1,46 @@
 import { render } from '../render';
-import { AbstractElement } from '../view/abstract-element';
 
+import { WayPointPresenter } from './index';
 import ListView from '../view/list-view';
-import ListItemView from '../view/list-item-view';
 
-import WayPointView from '../view/way-point-view';
-import AddNewPointView from '../view/add-new-point-view';
+import type { WayPoint } from '../types/way-point';
+import type { WayPointsModel, DestinationsModel, OffersModel } from '../model';
 
 export default class ListPresenter {
-  mainContainer;
-  taskListElement: ListView = new ListView();
+  #container: HTMLElement;
+  #listElement: ListView = new ListView();
 
-  constructor({ mainContainer }) {
-    this.mainContainer = mainContainer;
+  #wayPoints;
+  #models;
+
+  readonly #wayPointsModel: WayPointsModel;
+  readonly #offersModel: OffersModel;
+  readonly #destinationsModel: DestinationsModel;
+
+  constructor({ container: container, ...models }) {
+    this.#container = container;
+
+    this.#models = models;
+    this.#wayPointsModel = models.wayPointsModel;
+    this.#destinationsModel = models.destinationsModel;
+    this.#offersModel = models.offersModel;
+
+    this.renderWaypointList();
+    this.#wayPoints[2].switchToEdit();
   }
 
-  #renderListItem(element: AbstractElement<Element>) {
-    const listItem: ListItemView = new ListItemView();
+  private renderWaypointList(): void {
+    const wayPoints: WayPoint[] = this.#wayPointsModel.wayPoints;
 
-    render(listItem, this.taskListElement.element);
-    render(element, listItem.element);
-  }
+    this.#wayPoints = wayPoints.map(
+      (wayPoint) =>
+        new WayPointPresenter({
+          container: this.#listElement.element,
+          wayPoint,
+          ...this.#models,
+        }),
+    );
 
-  init() {
-    render(this.taskListElement, this.mainContainer);
-
-    this.#renderListItem(new AddNewPointView());
-    this.renderWaypointList(3);
-  }
-
-  renderWaypointList(count: number): void {
-    for (let i = 0; i < count; i++) {
-      this.#renderListItem(new WayPointView());
-    }
+    render(this.#listElement, this.#container);
   }
 }
