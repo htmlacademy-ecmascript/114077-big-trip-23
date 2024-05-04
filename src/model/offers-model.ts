@@ -1,4 +1,4 @@
-import MockService from '../services/mock-service';
+import type MockService from '../services/mock-service';
 import type { Offer } from '../types/offer';
 
 export default class OffersModel {

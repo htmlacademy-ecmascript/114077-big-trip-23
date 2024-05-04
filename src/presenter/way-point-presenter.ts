@@ -4,7 +4,7 @@ import type { WayPointsModel, DestinationsModel, OffersModel } from '../model';
 
 import ListItemView from '../view/list-item-view';
 import WayPointView from '../view/way-point-view';
-import AddPointView from '../view/add-point-view';
+import type AddPointView from '../view/add-point-view';
 import EditPointView from '../view/edit-point-view';
 
 interface WayPointPresenterProps {

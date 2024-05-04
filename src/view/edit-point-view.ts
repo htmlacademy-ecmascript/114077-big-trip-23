@@ -1,9 +1,9 @@
 import { capitalizeFirstLetter } from '../utils/capitalize';
 import { AbstractView } from './abstract-view';
 
-import { WayPoint } from '../types/way-point';
-import { AppPicture, Destination } from '../types/destination';
-import { InnerOffer, Offer } from '../types/offer';
+import type { WayPoint } from '../types/way-point';
+import type { AppPicture, Destination } from '../types/destination';
+import type { InnerOffer, Offer } from '../types/offer';
 
 type EditPointProps = {
   wayPoint: WayPoint;
