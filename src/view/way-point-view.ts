@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { AbstractView } from './abstract-view';
+import View from '../framework/view/view';
 import type { WayPoint } from '../types/way-point';
 import type { Destination } from '../types/destination';
 import type { InnerOffer, Offer } from '../types/offer';
@@ -52,8 +52,16 @@ const createTemplate = ({ wayPoint, destination, offer }: WayPointProps): string
   </div>
 `;
 
-export default class WayPointView extends AbstractView {
+export default class WayPointView extends View {
+  readonly #props;
+
+  constructor(props) {
+    super();
+
+    this.#props = props;
+  }
+
   get template(): string {
-    return createTemplate(this.props);
+    return createTemplate(this.#props);
   }
 }

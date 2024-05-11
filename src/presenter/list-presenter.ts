@@ -1,4 +1,4 @@
-import { render } from '../render';
+import { render } from '../framework/render';
 
 import { WayPointPresenter } from './index';
 import ListView from '../view/list-view';
@@ -26,7 +26,7 @@ export default class ListPresenter {
     this.#offersModel = models.offersModel;
 
     this.renderWaypointList();
-    this.#wayPoints[2].switchToEdit();
+    this.#wayPoints[0].switchToEdit();
   }
 
   private renderWaypointList(): void {

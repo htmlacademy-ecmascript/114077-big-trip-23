@@ -13,7 +13,7 @@ export default abstract class AbstractStatefulView<State extends object, El exte
     this.#rerenderElement();
   }
 
-  abstract _restoreHandlers()
+  abstract _restoreHandlers();
 
   _setState(update: State | Partial<State>) {
     this._state = structuredClone({ ...this._state, ...update });

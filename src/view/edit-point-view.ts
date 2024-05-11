@@ -1,5 +1,5 @@
 import { capitalizeFirstLetter } from '../utils/capitalize';
-import { AbstractView } from './abstract-view';
+import View from '../framework/view/view';
 
 import type { WayPoint } from '../types/way-point';
 import type { AppPicture, Destination } from '../types/destination';
@@ -119,8 +119,16 @@ const createTemplate = ({ wayPoint, destination, destinations, offers }: EditPoi
   </form>
 `;
 
-export default class EditPointView extends AbstractView<HTMLFormElement> {
+export default class EditPointView extends View<HTMLFormElement> {
+  readonly #props;
+
+  constructor(props) {
+    super();
+
+    this.#props = props;
+  }
+
   get template(): string {
-    return createTemplate(this.props);
+    return createTemplate(this.#props);
   }
 }
