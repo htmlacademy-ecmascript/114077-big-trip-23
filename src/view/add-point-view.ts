@@ -1,4 +1,4 @@
-import { AbstractView } from './abstract-view';
+import View from '../framework/view/view';
 
 const createTemplate = () => `
   <form class="event event--edit" action="#" method="post">
@@ -163,7 +163,7 @@ const createTemplate = () => `
   </form>
 `;
 
-export default class AddPointView extends AbstractView<HTMLFormElement> {
+export default class AddPointView extends View<HTMLFormElement> {
   get template(): string {
     return createTemplate();
   }

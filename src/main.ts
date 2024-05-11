@@ -1,4 +1,4 @@
-import { render } from './render';
+import { render } from './framework/render';
 
 import ListFilter from './view/list-filter-view';
 import ListSortView from './view/list-sort-view';
