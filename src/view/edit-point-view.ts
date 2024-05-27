@@ -1,5 +1,5 @@
 import { capitalizeFirstLetter } from '../utils/capitalize';
-import { AbstractView } from './abstract-view';
+import View from '../framework/view/view';
 
 import type { WayPoint } from '../types/way-point';
 import type { AppPicture, Destination } from '../types/destination';
@@ -7,9 +7,10 @@ import type { InnerOffer, Offer } from '../types/offer';
 
 type EditPointProps = {
   wayPoint: WayPoint;
-  destination: Destination;
   destinations: Destination[];
   offers: Offer[];
+  destination: Destination;
+  offer: Offer;
 };
 
 const createEventTypeItem = (offer: Offer, currentType) => `
@@ -46,8 +47,8 @@ const createDestinationOption = (destination: Destination) => `<option value="${
 
 const createDestinationPicture = (picture: AppPicture) => `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`;
 
-const createTemplate = ({ wayPoint, destination, destinations, offers }: EditPointProps) => `
-  <form class="event event--edit" action="#" method="post">
+const createTemplate = ({ wayPoint, destinations, offers, destination, offer }: EditPointProps) => `
+  <form class="event event--edit" action="#" method="post" id="form-edit">
     <header class="event__header">
       <div class="event__type-wrapper">
         <label class="event__type  event__type-btn" for="event-type-toggle-1">
@@ -60,7 +61,7 @@ const createTemplate = ({ wayPoint, destination, destinations, offers }: EditPoi
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Event type</legend>
 
-            ${offers.map((offer) => createEventTypeItem(offer, wayPoint.type)).join('')}
+            ${offers.map((offerItem) => createEventTypeItem(offerItem, wayPoint.type)).join('')}
           </fieldset>
         </div>
       </div>
@@ -86,7 +87,7 @@ const createTemplate = ({ wayPoint, destination, destinations, offers }: EditPoi
           <span class="visually-hidden">Price</span>
           &euro;
         </label>
-        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="160">
+        <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${offer.offers.reduce((a, b) => a + b.price, 0)}">
       </div>
 
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -119,8 +120,34 @@ const createTemplate = ({ wayPoint, destination, destinations, offers }: EditPoi
   </form>
 `;
 
-export default class EditPointView extends AbstractView<HTMLFormElement> {
+export default class EditPointView extends View<HTMLFormElement> {
+  readonly #props;
+  #handleFormSubmit;
+  #handleClickCloseButton;
+
+  constructor(props) {
+    super();
+
+    this.#props = props;
+
+    this.#handleFormSubmit = this.#props.onFormSubmit;
+    this.element.addEventListener('submit', this.#formSubmitHandler.bind(this));
+
+    this.#handleClickCloseButton = this.#props.onCloseButtonClick;
+    this.element.querySelector('.event__rollup-btn')!.addEventListener('click', this.#clickCloseButtonHandler.bind(this));
+  }
+
   get template(): string {
-    return createTemplate(this.props);
+    return createTemplate(this.#props);
+  }
+
+  #clickCloseButtonHandler(evt: Event) {
+    evt.preventDefault();
+    this.#handleClickCloseButton();
+  }
+
+  #formSubmitHandler(evt: Event) {
+    evt.preventDefault();
+    this.#handleFormSubmit();
   }
 }

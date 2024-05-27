@@ -1,4 +1,4 @@
-import { render } from '../render';
+import { render } from '../framework/render';
 
 import { WayPointPresenter } from './index';
 import ListView from '../view/list-view';
@@ -26,21 +26,21 @@ export default class ListPresenter {
     this.#offersModel = models.offersModel;
 
     this.renderWaypointList();
-    this.#wayPoints[2].switchToEdit();
   }
 
   private renderWaypointList(): void {
     const wayPoints: WayPoint[] = this.#wayPointsModel.wayPoints;
 
-    this.#wayPoints = wayPoints.map(
-      (wayPoint) =>
-        new WayPointPresenter({
-          container: this.#listElement.element,
-          wayPoint,
-          ...this.#models,
-        }),
-    );
+    this.#wayPoints = wayPoints.map(this.#renderWayPoint.bind(this));
 
     render(this.#listElement, this.#container);
+  }
+
+  #renderWayPoint(wayPoint) {
+    return new WayPointPresenter({
+      container: this.#listElement.element,
+      wayPoint,
+      ...this.#models,
+    });
   }
 }

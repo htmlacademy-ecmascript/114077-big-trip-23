@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { AbstractView } from './abstract-view';
+import View from '../framework/view/view';
 import type { WayPoint } from '../types/way-point';
 import type { Destination } from '../types/destination';
 import type { InnerOffer, Offer } from '../types/offer';
@@ -52,8 +52,25 @@ const createTemplate = ({ wayPoint, destination, offer }: WayPointProps): string
   </div>
 `;
 
-export default class WayPointView extends AbstractView {
+export default class WayPointView extends View {
+  readonly #props;
+  #handleEditClick;
+
+  constructor(props) {
+    super();
+
+    this.#props = props;
+
+    this.#handleEditClick = this.#props.onEditClick;
+    this.element?.querySelector('.event__rollup-btn')!.addEventListener('click', this.#clickHandler.bind(this));
+  }
+
   get template(): string {
-    return createTemplate(this.props);
+    return createTemplate(this.#props);
+  }
+
+  #clickHandler(evt: Event) {
+    evt.preventDefault();
+    this.#handleEditClick();
   }
 }

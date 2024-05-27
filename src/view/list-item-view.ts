@@ -1,8 +1,8 @@
-import { AbstractView } from './abstract-view';
+import View from '../framework/view/view';
 
 const createTemplate = (): string => '<li class="trip-events__item"></li>';
 
-export default class ListItemView extends AbstractView<HTMLLIElement> {
+export default class ListItemView extends View<HTMLLIElement> {
   get template(): string {
     return createTemplate();
   }
