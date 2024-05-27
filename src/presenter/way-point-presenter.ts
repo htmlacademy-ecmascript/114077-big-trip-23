@@ -68,7 +68,7 @@ export default class WayPointPresenter {
       onEditClick: () => {
         this.#switchToEditForm();
         document.addEventListener('keydown', escCallbackPointer);
-      }
+      },
     });
 
     render(this.#content, this.#item.element);
@@ -94,7 +94,7 @@ export default class WayPointPresenter {
       onCloseButtonClick: () => {
         this.#switchToWayPoint();
         document.removeEventListener('keydown', this.#escKeyDownHandler);
-      }
+      },
     });
 
     render(this.#content, this.#item.element);
