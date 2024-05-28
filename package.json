@@ -9,7 +9,9 @@
     "build": "webpack --mode production",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
-    "format": "prettier . --write"
+    "format": "prettier . --write",
+    "pre-commit": "lint-staged",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@babel/core": "7.21.4",
@@ -39,5 +41,11 @@
   ],
   "engines": {
     "node": "20"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,js,css}": [
+      "npm run format",
+      "npm run lint"
+    ]
   }
 }
