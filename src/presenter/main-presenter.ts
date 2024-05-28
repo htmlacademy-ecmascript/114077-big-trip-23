@@ -15,7 +15,7 @@ const tripEventsContainer = <HTMLElement>siteMainElement.querySelector('.trip-ev
 
 export default class MainPresenter {
   #filterContainer: HTMLElement = filterContainer;
-  #listContainer : HTMLElement = tripEventsContainer;
+  #listContainer: HTMLElement = tripEventsContainer;
 
   #listElement: ListView = new ListView();
 
@@ -26,7 +26,6 @@ export default class MainPresenter {
   readonly #wayPointsModel: WayPointsModel;
 
   constructor({ ...models }) {
-
     this.#models = models;
     this.#wayPointsModel = models.wayPointsModel;
 

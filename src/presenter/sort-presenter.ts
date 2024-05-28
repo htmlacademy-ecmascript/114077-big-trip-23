@@ -7,7 +7,6 @@ export default class SortPresenter {
 
   constructor({ container }) {
     this.#container = container;
-
   }
 
   init() {

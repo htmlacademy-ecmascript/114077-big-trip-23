@@ -10,12 +10,14 @@
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
     "format": "prettier . --write",
-    "pre-commit": "lint-staged",
-    "prepare": "husky"
+    "prepare": "husky install",
+    "pre-commit": "lint-staged"
   },
   "devDependencies": {
     "@babel/core": "7.21.4",
     "@babel/preset-env": "7.21.4",
+    "@commitlint/cli": "18.4.3",
+    "@commitlint/config-conventional": "18.4.3",
     "babel-loader": "9.1.2",
     "copy-webpack-plugin": "11.0.0",
     "css-loader": "6.7.3",
@@ -23,6 +25,9 @@
     "eslint": "8.56.0",
     "eslint-config-htmlacademy": "9.0.0",
     "html-webpack-plugin": "5.5.1",
+    "husky": "8.0.0",
+    "husky-init": "8.0.0",
+    "lint-staged": "15.2.0",
     "prettier": "3.2.5",
     "style-loader": "3.3.2",
     "ts-loader": "9.5.1",

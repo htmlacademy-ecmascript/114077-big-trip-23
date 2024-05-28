@@ -4,7 +4,7 @@ import ListFilter from '../view/list-filter-view';
 
 export default class FilterPresenter {
   readonly #container: HTMLElement;
-  #content : ListFilter = new ListFilter();
+  #content: ListFilter = new ListFilter();
 
   constructor({ container }) {
     this.#container = container;
