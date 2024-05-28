@@ -13,4 +13,8 @@ export default class WayPointsModel {
   get wayPoints() {
     return this.#wayPoints;
   }
+
+  getWayPointsBy(index) {
+    return this.#wayPoints.slice().splice(0, index);
+  }
 }

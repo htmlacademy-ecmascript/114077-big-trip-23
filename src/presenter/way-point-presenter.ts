@@ -1,4 +1,4 @@
-import { render } from '../framework/render';
+import { render, replace } from '../framework/render';
 import type { WayPoint } from '../types/way-point';
 import type { WayPointsModel, DestinationsModel, OffersModel } from '../model';
 
