@@ -11,4 +11,4 @@ const models = {
   destinationsModel: new DestinationsModel(service),
 };
 
-new MainPresenter({ ...models });
+new MainPresenter({ ...models }).init();

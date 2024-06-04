@@ -1,6 +1,6 @@
-import { render } from '../framework/render';
+import { remove, render, replace } from '../framework/render';
 import type { WayPoint } from '../types/way-point';
-import type { WayPointsModel, DestinationsModel, OffersModel } from '../model';
+import type { DestinationsModel, OffersModel } from '../model';
 
 import ListItemView from '../view/list-item-view';
 import WayPointView from '../view/way-point-view';
@@ -9,43 +9,84 @@ import EditPointView from '../view/edit-point-view';
 
 let escCallbackPointer;
 
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
+
+type DataChangeFunction = (wayPoint: WayPoint) => void;
+type ModeChangeFunction = () => void;
+
 interface WayPointPresenterProps {
   container: HTMLUListElement;
-  wayPoint: WayPoint;
 
-  wayPointsModel: WayPointsModel;
   destinationsModel: DestinationsModel;
   offersModel: OffersModel;
+
+  onDataChange: DataChangeFunction | null;
+  onModeChange: ModeChangeFunction | null;
 }
 
 export default class WayPointPresenter {
-  #wayPointsModel: WayPointsModel | null = null;
   #destinationsModel: DestinationsModel | null = null;
   #offersModel: OffersModel | null = null;
 
   #wayPoint: WayPoint | null = null;
+  #mode = Mode.DEFAULT;
 
   #container: HTMLElement | null = null;
-  #item = new ListItemView();
+  #listItemView = new ListItemView();
+
   #content: WayPointView | AddPointView | EditPointView | null = null;
 
-  constructor({ container, wayPoint, ...models }: WayPointPresenterProps) {
+  readonly #handleDataChange: DataChangeFunction | null = null;
+  readonly #handleModeChange: ModeChangeFunction | null = null;
+
+  constructor({ container, destinationsModel, offersModel, onDataChange, onModeChange }: WayPointPresenterProps) {
     this.#container = container;
-    this.#wayPoint = wayPoint;
 
-    this.#wayPointsModel = models.wayPointsModel;
-    this.#destinationsModel = models.destinationsModel;
-    this.#offersModel = models.offersModel;
+    this.#destinationsModel = destinationsModel;
+    this.#offersModel = offersModel;
 
-    this.#renderInfo();
-    render(this.#item, this.#container);
+    this.#handleDataChange = onDataChange;
+    this.#handleModeChange = onModeChange;
   }
 
-  #removeOldContent() {
-    const oldContent = this.#content!;
+  init(wayPoint) {
+    this.#wayPoint = wayPoint;
+    const prevContent = this.#content;
 
-    oldContent.element.remove();
-    oldContent.removeElement();
+    if (prevContent === null) {
+      this.#renderInfo();
+      render(this.#content!, this.#listItemView.element);
+      render(this.#listItemView, this.#container!);
+      return;
+    }
+
+    // Проверка на наличие в DOM необходима,
+    // чтобы не пытаться заменить то, что не было отрисовано
+    if (this.#mode === Mode.DEFAULT) {
+      this.#renderInfo();
+      replace(this.#content!, prevContent);
+    }
+
+    if (this.#mode === Mode.EDITING) {
+      this.#renderEditForm();
+      replace(this.#content!, prevContent);
+    }
+
+    remove(prevContent);
+  }
+
+  destroy() {
+    remove(this.#content);
+    remove(this.#content);
+  }
+
+  resetView() {
+    if (this.#mode !== Mode.DEFAULT) {
+      this.#switchToWayPoint();
+    }
   }
 
   #escKeyDownHandler = (evt: KeyboardEvent) => {
@@ -69,9 +110,12 @@ export default class WayPointPresenter {
         this.#switchToEditForm();
         document.addEventListener('keydown', escCallbackPointer);
       },
+      onFavoriteClick: () => {
+        if (this.#handleDataChange) {
+          this.#handleDataChange({ ...wayPoint, isFavorite: !wayPoint.isFavorite });
+        }
+      },
     });
-
-    render(this.#content, this.#item.element);
   }
 
   #renderEditForm() {
@@ -96,19 +140,24 @@ export default class WayPointPresenter {
         document.removeEventListener('keydown', this.#escKeyDownHandler);
       },
     });
-
-    render(this.#content, this.#item.element);
   }
 
   #switchToEditForm() {
     escCallbackPointer = this.#escKeyDownHandler;
 
-    this.#removeOldContent();
+    remove(this.#content);
     this.#renderEditForm();
+    render(this.#content!, this.#listItemView.element);
+
+    this.#handleModeChange!();
+    this.#mode = Mode.EDITING;
   }
 
   #switchToWayPoint() {
-    this.#removeOldContent();
+    remove(this.#content);
     this.#renderInfo();
+    render(this.#content!, this.#listItemView.element);
+
+    this.#mode = Mode.DEFAULT;
   }
 }
