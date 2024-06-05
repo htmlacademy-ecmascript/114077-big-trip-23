@@ -54,7 +54,8 @@ const createTemplate = ({ wayPoint, destination, offer }: WayPointProps): string
 
 export default class WayPointView extends View {
   readonly #props;
-  #handleEditClick;
+  readonly #handleEditClick;
+  readonly #handleFavoriteClick;
 
   constructor(props) {
     super();
@@ -62,7 +63,14 @@ export default class WayPointView extends View {
     this.#props = props;
 
     this.#handleEditClick = this.#props.onEditClick;
+    this.#handleFavoriteClick = this.#props.onFavoriteClick;
+
+    this.#initHandlers();
+  }
+
+  #initHandlers() {
     this.element?.querySelector('.event__rollup-btn')!.addEventListener('click', this.#clickHandler.bind(this));
+    this.element?.querySelector('.event__favorite-btn')!.addEventListener('click', this.#clickFavorite.bind(this));
   }
 
   get template(): string {
@@ -72,5 +80,10 @@ export default class WayPointView extends View {
   #clickHandler(evt: Event) {
     evt.preventDefault();
     this.#handleEditClick();
+  }
+
+  #clickFavorite(evt: Event) {
+    evt.preventDefault();
+    this.#handleFavoriteClick();
   }
 }
