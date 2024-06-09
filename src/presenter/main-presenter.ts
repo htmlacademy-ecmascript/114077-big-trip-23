@@ -28,6 +28,8 @@ export default class MainPresenter {
   #openedWayPointId: string | null = null;
   #wayPointPresenters: Map<string, WayPointPresenter> = new Map();
 
+  #sourcedWayPoints: WayPoint[] = [];
+
   readonly #models;
   readonly #wayPointsModel: WayPointsModel;
   readonly #destinationsModel: DestinationsModel;
@@ -40,12 +42,19 @@ export default class MainPresenter {
     this.#destinationsModel = models.destinationsModel;
     this.#offersModel = models.offersModel;
 
-    this.#filterPresenter = new FilterPresenter({ container: this.#filterContainer });
-    this.#sortPresenter = new SortPresenter({ container: this.#listContainer });
+    this.#filterPresenter = new FilterPresenter({
+      container: this.#filterContainer,
+    });
+
+    this.#sortPresenter = new SortPresenter({
+      container: this.#listContainer,
+      onSortTypeChange: this.#handleSortType,
+    });
   }
 
   init() {
     this.#wayPoints = [...this.#wayPointsModel.wayPoints];
+    this.#sourcedWayPoints = [...this.#wayPointsModel.wayPoints];
     this.#renderWaypointList(this.#wayPoints);
   }
 
@@ -65,6 +74,8 @@ export default class MainPresenter {
 
   #handleTaskChange = (updatedWayPoint: WayPoint) => {
     this.#wayPoints = updateItem(this.#wayPoints, updatedWayPoint);
+    this.#sourcedWayPoints = updateItem(this.#sourcedWayPoints, updatedWayPoint);
+
     this.#wayPointPresenters.get(updatedWayPoint.id)!.init(updatedWayPoint);
   };
 
@@ -75,6 +86,11 @@ export default class MainPresenter {
 
     this.#openedWayPointId = activeId;
   };
+
+  #handleSortType(value) {
+    return value;
+    // console.log('on change', value);
+  }
 
   #renderWayPoint(wayPoint: WayPoint, container: HTMLUListElement) {
     const wayPointPresenter = new WayPointPresenter({

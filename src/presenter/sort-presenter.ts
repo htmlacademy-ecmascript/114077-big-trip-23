@@ -8,11 +8,11 @@ export default class SortPresenter {
   readonly #container: HTMLElement;
   readonly #content: ListSortView;
 
-  constructor({ container }) {
+  constructor({ container, onSortTypeChange }) {
     this.#container = container;
 
     const items = SORT_TYPES.map((name) => ({ name, isDisabled: Randomizer.boolean }));
-    this.#content = new ListSortView({ items });
+    this.#content = new ListSortView({ items, onSortTypeChange });
   }
 
   init() {
