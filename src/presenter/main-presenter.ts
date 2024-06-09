@@ -25,6 +25,7 @@ export default class MainPresenter {
   #filterPresenter;
 
   #wayPoints: WayPoint[] = [];
+  #openedWayPointId: string | null = null;
   #wayPointPresenters: Map<string, WayPointPresenter> = new Map();
 
   readonly #models;
@@ -67,8 +68,12 @@ export default class MainPresenter {
     this.#wayPointPresenters.get(updatedWayPoint.id)!.init(updatedWayPoint);
   };
 
-  #handleModeChange = () => {
-    this.#wayPointPresenters.forEach((presenter) => presenter.resetView());
+  #handleModeChange = (activeId: string | null = null) => {
+    if (this.#openedWayPointId && activeId) {
+      this.#wayPointPresenters.get(this.#openedWayPointId)!.resetView();
+    }
+
+    this.#openedWayPointId = activeId;
   };
 
   #renderWayPoint(wayPoint: WayPoint, container: HTMLUListElement) {
