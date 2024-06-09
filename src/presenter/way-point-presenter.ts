@@ -80,7 +80,6 @@ export default class WayPointPresenter {
 
   destroy() {
     remove(this.#content);
-    remove(this.#content);
   }
 
   resetView() {

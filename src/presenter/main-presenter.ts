@@ -1,5 +1,6 @@
-import { render } from '../framework/render';
+import { remove, render } from '../framework/render';
 import { updateItem } from '../utils/common';
+import { prepareSortValue, sortByDate, sortByEvent, sortByOffers, sortByPrice } from '../utils/sort-waypoints';
 
 import { FilterPresenter, SortPresenter, WayPointPresenter } from './index';
 import ListView from '../view/list-view';
@@ -48,7 +49,7 @@ export default class MainPresenter {
 
     this.#sortPresenter = new SortPresenter({
       container: this.#listContainer,
-      onSortTypeChange: this.#handleSortType,
+      onSortTypeChange: this.#handleSortType.bind(this),
     });
   }
 
@@ -60,6 +61,7 @@ export default class MainPresenter {
 
   #renderWaypointList(wayPoints: WayPoint[]): void {
     if (!wayPoints.length) {
+      this.#sortPresenter.destroy();
       render(new ListNoItemView(), this.#listContainer);
     } else {
       this.#sortPresenter.init();
@@ -88,8 +90,35 @@ export default class MainPresenter {
   };
 
   #handleSortType(value) {
-    return value;
-    // console.log('on change', value);
+    const preparedValue = prepareSortValue(value);
+
+    switch (preparedValue) {
+      case 'day':
+        this.#wayPoints.sort(sortByDate);
+        break;
+
+      case 'event':
+        this.#wayPoints.sort(sortByEvent(this.#destinationsModel));
+        break;
+
+      case 'time':
+        this.#wayPoints = [...this.#sourcedWayPoints]; // TODO: посмотреть в ТЗ как сортировать
+        break;
+
+      case 'price':
+        this.#wayPoints.sort(sortByPrice(this.#offersModel));
+        break;
+
+      case 'offer':
+        this.#wayPoints.sort(sortByOffers);
+        break;
+
+      default:
+        this.#wayPoints = [...this.#sourcedWayPoints];
+    }
+
+    this.#clearWayPoints();
+    this.#renderWaypointList(this.#wayPoints);
   }
 
   #renderWayPoint(wayPoint: WayPoint, container: HTMLUListElement) {
@@ -104,5 +133,12 @@ export default class MainPresenter {
 
     wayPointPresenter.init(wayPoint);
     this.#wayPointPresenters.set(wayPoint.id, wayPointPresenter);
+  }
+
+  #clearWayPoints() {
+    this.#wayPointPresenters.forEach((presenter) => presenter.destroy());
+    this.#wayPointPresenters.clear();
+
+    remove(this.#listComponent);
   }
 }
