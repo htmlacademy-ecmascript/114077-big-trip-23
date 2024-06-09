@@ -1,3 +1,5 @@
+import { sortByDate } from '../utils/sort-waypoints';
+
 import type MockService from '../services/mock-service';
 import type { WayPoint } from '../types/way-point';
 
@@ -11,7 +13,7 @@ export default class WayPointsModel {
   }
 
   get wayPoints() {
-    return this.#wayPoints;
+    return this.#wayPoints.sort(sortByDate);
   }
 
   getWayPointsBy(index) {
