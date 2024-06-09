@@ -15,14 +15,34 @@ const createTemplate = ({ items }) => `
 
 export default class ListSortView extends View<HTMLFormElement> {
   readonly #props;
+  readonly #handleSortTypeChange;
 
   constructor(props) {
     super();
 
     this.#props = props;
+
+    this.#handleSortTypeChange = this.#props.onSortTypeChange;
+
+    this.#initHandlers();
   }
 
   get template(): string {
     return createTemplate(this.#props);
+  }
+
+  #initHandlers() {
+    // console.log('this.#handleSortTypeChange', this.#handleSortTypeChange);
+
+    const inputs = this.element!.querySelectorAll('.trip-sort__input');
+    inputs.forEach((input) => input.addEventListener('change', this.#sortTypeChangeHandler.bind(this)));
+  }
+
+  #sortTypeChangeHandler(evt: Event) {
+    evt.preventDefault();
+
+    if (evt.target) {
+      this.#handleSortTypeChange((evt.target as HTMLInputElement).value);
+    }
   }
 }

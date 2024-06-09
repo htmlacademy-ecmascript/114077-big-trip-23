@@ -15,7 +15,7 @@ const Mode = {
 };
 
 type DataChangeFunction = (wayPoint: WayPoint) => void;
-type ModeChangeFunction = () => void;
+type ModeChangeFunction = (id?: string) => void;
 
 interface WayPointPresenterProps {
   container: HTMLUListElement;
@@ -34,7 +34,7 @@ export default class WayPointPresenter {
   #wayPoint: WayPoint | null = null;
   #mode = Mode.DEFAULT;
 
-  #container: HTMLElement | null = null;
+  readonly #container: HTMLElement | null = null;
   #listItemView = new ListItemView();
 
   #content: WayPointView | AddPointView | EditPointView | null = null;
@@ -79,7 +79,6 @@ export default class WayPointPresenter {
   }
 
   destroy() {
-    remove(this.#content);
     remove(this.#content);
   }
 
@@ -149,7 +148,7 @@ export default class WayPointPresenter {
     this.#renderEditForm();
     render(this.#content!, this.#listItemView.element);
 
-    this.#handleModeChange!();
+    this.#handleModeChange!(this.#wayPoint!.id);
     this.#mode = Mode.EDITING;
   }
 
@@ -158,6 +157,7 @@ export default class WayPointPresenter {
     this.#renderInfo();
     render(this.#content!, this.#listItemView.element);
 
+    this.#handleModeChange!();
     this.#mode = Mode.DEFAULT;
   }
 }
