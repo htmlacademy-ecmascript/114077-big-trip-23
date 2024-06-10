@@ -1,10 +1,10 @@
 import type { WayPoint } from '../types/way-point';
 import { appDay } from './time';
-import type { SORT_TYPES } from '../const';
+import type { SortType } from '../const';
 import type { DestinationsModel, OffersModel } from '../model';
 
-function prepareSortValue(value: string): (typeof SORT_TYPES)[number] {
-  return value.replace('sort-', '') as (typeof SORT_TYPES)[number];
+function prepareSortValue(value: string): SortType {
+  return value.replace('sort-', '') as SortType;
 }
 
 function sortByDate(wayPointA: WayPoint, wayPointB: WayPoint): number {
