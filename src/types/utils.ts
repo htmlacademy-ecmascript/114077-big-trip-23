@@ -10,9 +10,25 @@ type CamelizeObject<T extends object> = {
   [K in keyof T & string as CamelCase<K>]: T[K];
 };
 
+/** делает из camelCase строки snake_case */
+type SnakeCase<T> = T extends `${infer First}${infer Rest}`
+  ? First extends Uppercase<First>
+    ? `_${Lowercase<First>}${SnakeCase<Rest>}`
+    : `${First}${SnakeCase<Rest>}`
+  : '';
+
+/**  Меняет ключи объекта snake_case */
+type SnakeCaseObject<T extends object> = {
+  [K in keyof T & string as SnakeCase<K>]: T[K];
+};
+
 /** Если ключ начинается с date, то меняет тип на Dayjs */
 type WithDate<T extends object> = {
   [K in keyof T]: K extends `date${string}` ? Dayjs : T[K];
 };
 
-export type { CamelCase, CamelizeObject, WithDate };
+type Prettify<T> = {
+  [K in keyof T]: T[K];
+};
+
+export type { CamelizeObject, SnakeCaseObject, WithDate, Prettify };

@@ -1,9 +1,9 @@
 import { capitalizeFirstLetter } from '../utils/capitalize';
-import View from '../framework/view/view';
 
 import type { WayPoint } from '../types/way-point';
 import type { AppPicture, Destination } from '../types/destination';
 import type { InnerOffer, Offer } from '../types/offer';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 
 type EditPointProps = {
   wayPoint: WayPoint;
@@ -120,7 +120,7 @@ const createTemplate = ({ wayPoint, destinations, offers, destination, offer }: 
   </form>
 `;
 
-export default class EditPointView extends View<HTMLFormElement> {
+export default class EditPointView extends AbstractStatefulView<EditPointProps> {
   readonly #props;
   #handleFormSubmit;
   #handleClickCloseButton;
@@ -130,15 +130,21 @@ export default class EditPointView extends View<HTMLFormElement> {
 
     this.#props = props;
 
-    this.#handleFormSubmit = this.#props.onFormSubmit;
-    this.element.addEventListener('submit', this.#formSubmitHandler.bind(this));
+    const { wayPoint, destinations, offers, destination, offer } = props;
+    this._setState({ wayPoint, destinations, offers, destination, offer });
 
+    // TODO: временная заглушка, чтобы не переписывать structuredClone
+    this._state.wayPoint.dateFrom = this.#props.wayPoint.dateFrom;
+    this._state.wayPoint.dateTo = this.#props.wayPoint.dateTo;
+
+    this.#handleFormSubmit = this.#props.onFormSubmit;
     this.#handleClickCloseButton = this.#props.onCloseButtonClick;
-    this.element.querySelector('.event__rollup-btn')!.addEventListener('click', this.#clickCloseButtonHandler.bind(this));
+
+    this._restoreHandlers();
   }
 
   get template(): string {
-    return createTemplate(this.#props);
+    return createTemplate(this._state);
   }
 
   #clickCloseButtonHandler(evt: Event) {
@@ -149,5 +155,10 @@ export default class EditPointView extends View<HTMLFormElement> {
   #formSubmitHandler(evt: Event) {
     evt.preventDefault();
     this.#handleFormSubmit();
+  }
+
+  _restoreHandlers() {
+    this.element.addEventListener('submit', this.#formSubmitHandler.bind(this));
+    this.element.querySelector('.event__rollup-btn')!.addEventListener('click', this.#clickCloseButtonHandler.bind(this));
   }
 }
