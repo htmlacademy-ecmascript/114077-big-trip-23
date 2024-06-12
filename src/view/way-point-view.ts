@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import { appDay } from '../utils/time';
 import View from '../framework/view/view';
 import type { WayPoint } from '../types/way-point';
 import type { Destination } from '../types/destination';
@@ -18,20 +18,24 @@ const createOffers = (offer: InnerOffer) => `
   </li>
 `;
 
-const createTemplate = ({ wayPoint, destination, offer }: WayPointProps): string => `
+const createTemplate = ({ wayPoint, destination, offer }: WayPointProps): string => {
+  const dateFrom = appDay(wayPoint.dateFrom);
+  const dateTo = appDay(wayPoint.dateTo);
+
+  return `
   <div class="event">
-    <time class="event__date" datetime="2019-03-18">${wayPoint.dateFrom.format('MMM DD')}</time>
+    <time class="event__date" datetime="2019-03-18">${dateFrom.format('MMM DD')}</time>
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/${wayPoint.type}.png" alt="Event type icon">
     </div>
     <h3 class="event__title">${wayPoint.type} ${destination.name}</h3>
     <div class="event__schedule">
       <p class="event__time">
-        <time class="event__start-time" datetime="2019-03-18T10:30">${wayPoint.dateFrom.format('HH:MM')}</time>
+        <time class="event__start-time" datetime="2019-03-18T10:30">${dateFrom.format('HH:MM')}</time>
         &mdash;
-        <time class="event__end-time" datetime="2019-03-18T11:00">${wayPoint.dateTo.format('HH:MM')}</time>
+        <time class="event__end-time" datetime="2019-03-18T11:00">${dateTo.format('HH:MM')}</time>
       </p>
-      <p class="event__duration">${dayjs.duration(wayPoint.dateTo.diff(wayPoint.dateFrom)).asMinutes()}M</p>
+      <p class="event__duration">${appDay.duration(dateTo.diff(dateFrom)).asMinutes()}M</p>
     </div>
     <p class="event__price">
       &euro;&nbsp;<span class="event__price-value">${offer.offers.reduce((a, b) => a + b.price, 0)}</span>
@@ -51,6 +55,7 @@ const createTemplate = ({ wayPoint, destination, offer }: WayPointProps): string
     </button>
   </div>
 `;
+};
 
 export default class WayPointView extends View {
   readonly #props;
