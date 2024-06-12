@@ -14,7 +14,7 @@ const getDates = (): { dateTo: WayPoint['dateTo']; dateFrom: WayPoint['dateFrom'
 
   const dateTo = dateFrom.add(getRandomDay(), 'day').add(getRandomHour(), 'hour').add(getRandomMinute(), 'minute');
 
-  return { dateTo, dateFrom };
+  return { dateTo: dateTo.toString(), dateFrom: dateFrom.toString() };
 };
 
 const mockWayPoint = (props: Pick<WayPoint, 'destination' | 'offers' | 'type'>): WayPoint => {

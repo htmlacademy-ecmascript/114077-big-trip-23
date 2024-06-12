@@ -1,16 +1,19 @@
+import { appDay } from '../utils/time';
 import { capitalizeFirstLetter } from '../utils/capitalize';
-import View from '../framework/view/view';
 
-import type { WayPoint } from '../types/way-point';
+import type { PointType, WayPoint } from '../types/way-point';
 import type { AppPicture, Destination } from '../types/destination';
 import type { InnerOffer, Offer } from '../types/offer';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view';
+import type { DestinationsModel, OffersModel } from '../model';
 
 type EditPointProps = {
   wayPoint: WayPoint;
-  destinations: Destination[];
-  offers: Offer[];
-  destination: Destination;
-  offer: Offer;
+  destinationsModel: DestinationsModel;
+  offersModel: OffersModel;
+
+  onFormSubmit: () => void;
+  onCloseButtonClick: () => void;
 };
 
 const createEventTypeItem = (offer: Offer, currentType) => `
@@ -47,7 +50,14 @@ const createDestinationOption = (destination: Destination) => `<option value="${
 
 const createDestinationPicture = (picture: AppPicture) => `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`;
 
-const createTemplate = ({ wayPoint, destinations, offers, destination, offer }: EditPointProps) => `
+const createTemplate = (wayPoint: WayPoint, { destinationsModel, offersModel }: EditPointProps) => {
+  const destination = destinationsModel.getById(wayPoint.destination)!;
+  const offer = offersModel!.getByType(wayPoint.type)!;
+
+  const destinations = destinationsModel.destinations;
+  const offers = offersModel.offers;
+
+  return `
   <form class="event event--edit" action="#" method="post" id="form-edit">
     <header class="event__header">
       <div class="event__type-wrapper">
@@ -76,10 +86,10 @@ const createTemplate = ({ wayPoint, destinations, offers, destination, offer }: 
 
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-1">From</label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${wayPoint.dateFrom.format('DD/MM/YY HH:MM')}">
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${appDay(wayPoint.dateFrom).format('DD/MM/YY HH:MM')}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${wayPoint.dateTo.format('DD/MM/YY HH:MM')}">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${appDay(wayPoint.dateTo).format('DD/MM/YY HH:MM')}">
       </div>
 
       <div class="event__field-group  event__field-group--price">
@@ -119,26 +129,31 @@ const createTemplate = ({ wayPoint, destinations, offers, destination, offer }: 
     </section>
   </form>
 `;
+};
 
-export default class EditPointView extends View<HTMLFormElement> {
-  readonly #props;
-  #handleFormSubmit;
-  #handleClickCloseButton;
+export default class EditPointView extends AbstractStatefulView<WayPoint> {
+  readonly #props: EditPointProps;
+
+  readonly #handleFormSubmit;
+  readonly #handleClickCloseButton;
 
   constructor(props) {
     super();
 
     this.#props = props;
 
-    this.#handleFormSubmit = this.#props.onFormSubmit;
-    this.element.addEventListener('submit', this.#formSubmitHandler.bind(this));
+    const { wayPoint } = props;
 
+    this._setState(EditPointView.parseWayPointToState(wayPoint));
+
+    this.#handleFormSubmit = this.#props.onFormSubmit;
     this.#handleClickCloseButton = this.#props.onCloseButtonClick;
-    this.element.querySelector('.event__rollup-btn')!.addEventListener('click', this.#clickCloseButtonHandler.bind(this));
+
+    this._restoreHandlers();
   }
 
   get template(): string {
-    return createTemplate(this.#props);
+    return createTemplate(this._state, this.#props);
   }
 
   #clickCloseButtonHandler(evt: Event) {
@@ -149,5 +164,42 @@ export default class EditPointView extends View<HTMLFormElement> {
   #formSubmitHandler(evt: Event) {
     evt.preventDefault();
     this.#handleFormSubmit();
+  }
+
+  _restoreHandlers() {
+    this.element.addEventListener('submit', this.#formSubmitHandler.bind(this));
+    this.element.querySelector('.event__rollup-btn')!.addEventListener('click', this.#clickCloseButtonHandler.bind(this));
+
+    this.element.querySelectorAll('.event__type-input').forEach((input) =>
+      input.addEventListener('change', (evt: Event) => {
+        if (evt.target instanceof HTMLInputElement) {
+          this._state.type = evt.target!.value as PointType;
+          this.updateElement(this._state);
+        }
+      }),
+    );
+
+    this.element.querySelector('.event__input--destination')!.addEventListener('change', (evt: Event) => {
+      if (evt.target instanceof HTMLInputElement) {
+        const newDestination = this.#props.destinationsModel.getByName(evt.target!.value);
+
+        if (newDestination) {
+          this._state.destination = newDestination.id;
+          this.updateElement(this._state);
+        }
+      }
+    });
+  }
+
+  static parseWayPointToState(wayPoint: WayPoint) {
+    return {
+      ...wayPoint,
+    };
+  }
+
+  static parseStateToWayPoint(state: WayPoint) {
+    return {
+      ...state,
+    };
   }
 }

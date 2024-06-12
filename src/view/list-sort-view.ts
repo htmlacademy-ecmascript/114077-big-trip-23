@@ -41,8 +41,8 @@ export default class ListSortView extends View<HTMLFormElement> {
   #sortTypeChangeHandler(evt: Event) {
     evt.preventDefault();
 
-    if (evt.target) {
-      this.#handleSortTypeChange((evt.target as HTMLInputElement).value);
+    if (evt.target instanceof HTMLInputElement) {
+      this.#handleSortTypeChange(evt.target.value);
     }
   }
 }
