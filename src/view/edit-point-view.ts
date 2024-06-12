@@ -5,13 +5,12 @@ import type { PointType, WayPoint } from '../types/way-point';
 import type { AppPicture, Destination } from '../types/destination';
 import type { InnerOffer, Offer } from '../types/offer';
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
+import type { DestinationsModel, OffersModel } from '../model';
 
 type EditPointProps = {
   wayPoint: WayPoint;
-  destinations: Destination[];
-  offers: Offer[];
-  destination: Destination;
-  offer: Offer;
+  destinationsModel: DestinationsModel;
+  offersModel: OffersModel;
 
   onFormSubmit: () => void;
   onCloseButtonClick: () => void;
@@ -51,7 +50,14 @@ const createDestinationOption = (destination: Destination) => `<option value="${
 
 const createDestinationPicture = (picture: AppPicture) => `<img class="event__photo" src="${picture.src}" alt="${picture.description}">`;
 
-const createTemplate = (wayPoint: WayPoint, { destinations, offers, destination, offer }: EditPointProps) => `
+const createTemplate = (wayPoint: WayPoint, { destinationsModel, offersModel }: EditPointProps) => {
+  const destination = destinationsModel.getById(wayPoint.destination)!;
+  const offer = offersModel!.getByType(wayPoint.type)!;
+
+  const destinations = destinationsModel.destinations;
+  const offers = offersModel.offers;
+
+  return `
   <form class="event event--edit" action="#" method="post" id="form-edit">
     <header class="event__header">
       <div class="event__type-wrapper">
@@ -123,9 +129,11 @@ const createTemplate = (wayPoint: WayPoint, { destinations, offers, destination,
     </section>
   </form>
 `;
+};
 
 export default class EditPointView extends AbstractStatefulView<WayPoint> {
   readonly #props: EditPointProps;
+
   readonly #handleFormSubmit;
   readonly #handleClickCloseButton;
 
@@ -135,6 +143,7 @@ export default class EditPointView extends AbstractStatefulView<WayPoint> {
     this.#props = props;
 
     const { wayPoint } = props;
+
     this._setState(EditPointView.parseWayPointToState(wayPoint));
 
     this.#handleFormSubmit = this.#props.onFormSubmit;
@@ -169,6 +178,17 @@ export default class EditPointView extends AbstractStatefulView<WayPoint> {
         }
       }),
     );
+
+    this.element.querySelector('.event__input--destination')!.addEventListener('change', (evt: Event) => {
+      if (evt.target instanceof HTMLInputElement) {
+        const newDestination = this.#props.destinationsModel.getByName(evt.target!.value);
+
+        if (newDestination) {
+          this._state.destination = newDestination.id;
+          this.updateElement(this._state);
+        }
+      }
+    });
   }
 
   static parseWayPointToState(wayPoint: WayPoint) {
