@@ -1,10 +1,13 @@
-import { appDay } from '../utils/time';
+import { appDay, flatpickrBaseConfig } from '../utils/time';
 import { capitalizeFirstLetter } from '../utils/capitalize';
 
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
+
+import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import type { PointType, WayPoint } from '../types/way-point';
 import type { AppPicture, Destination } from '../types/destination';
 import type { InnerOffer, Offer } from '../types/offer';
-import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import type { DestinationsModel, OffersModel } from '../model';
 
 type EditPointProps = {
@@ -166,6 +169,51 @@ export default class EditPointView extends AbstractStatefulView<WayPoint> {
     this.#handleFormSubmit();
   }
 
+  #setDateFromPicker() {
+    const startDateChangeHandler = ([userDate]: Date[]) => {
+      const start = appDay(userDate);
+      const finish = appDay(this._state.dateTo);
+
+      if (start >= finish) {
+        this._state.dateTo = start.add(5, 'minute').toString();
+      }
+
+      this.updateElement({
+        dateFrom: userDate.toString(),
+      });
+    };
+
+    flatpickr(this.element.querySelectorAll('.event__input--time')[0], {
+      ...flatpickrBaseConfig,
+      minDate: 'today',
+      dateFormat: 'j\\/m\\/y H\\:i',
+      onChange: startDateChangeHandler,
+    });
+  }
+
+  #setEventFinish() {
+    const currentStartDate = this._state.dateFrom === '' ? 'today' : appDay(this._state.dateFrom).toString();
+
+    const finishDateChangeHandler = ([userDate]: Date[]) => {
+      const start = appDay(this._state.dateFrom);
+      const finish = appDay(userDate);
+
+      if (start >= finish) {
+        this._state.dateFrom = start.subtract(5, 'minute').toString();
+      }
+
+      this.updateElement({
+        dateTo: userDate.toString(),
+      });
+    };
+
+    flatpickr(this.element.querySelectorAll('.event__input--time')[1], {
+      ...flatpickrBaseConfig,
+      minDate: currentStartDate,
+      onChange: finishDateChangeHandler,
+    });
+  }
+
   _restoreHandlers() {
     this.element.addEventListener('submit', this.#formSubmitHandler.bind(this));
     this.element.querySelector('.event__rollup-btn')!.addEventListener('click', this.#clickCloseButtonHandler.bind(this));
@@ -189,6 +237,9 @@ export default class EditPointView extends AbstractStatefulView<WayPoint> {
         }
       }
     });
+
+    this.#setDateFromPicker();
+    this.#setEventFinish();
   }
 
   static parseWayPointToState(wayPoint: WayPoint) {
